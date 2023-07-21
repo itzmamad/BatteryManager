@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">BatteryManager</string>
     <string name="in_this_app_you_can">in this app you can</string>
+    <string name="info_title">check your battery state</string>
+    <string name="voltage">voltage</string>
+    <string name="technology">technology</string>
+    <string name="plug_in">plug state</string>
+    <string name="temperature">temperature</string>
 </resources>

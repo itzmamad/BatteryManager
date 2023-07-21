@@ -1,9 +1,8 @@
-package com.example.batterymanager
+package com.example.batterymanager.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
 import com.example.batterymanager.databinding.ActivitySplashBinding
 import java.util.Timer
 import kotlin.concurrent.timerTask
@@ -82,6 +81,7 @@ class SplashActivity : AppCompatActivity() {
 
         Timer().schedule(timerTask {
             startActivity(Intent(this@SplashActivity, MainActivity::class.java))
+            finish()
         }, 7000)
     }
 
