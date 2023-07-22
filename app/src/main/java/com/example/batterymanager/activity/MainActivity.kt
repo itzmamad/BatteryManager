@@ -1,14 +1,17 @@
 package com.example.batterymanager.activity
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.BatteryManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import com.example.batterymanager.R
 import com.example.batterymanager.utils.BatteryUsage
 import com.example.batterymanager.databinding.ActivityMainBinding
 import com.example.batterymanager.model.BatteryModel
@@ -38,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private var batteryInfoReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        @SuppressLint("SetTextI18n")
         override fun onReceive(context: Context, intent: Intent) {
             var batteryLevel = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0)
             if (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) == 0) {
@@ -57,6 +61,50 @@ class MainActivity : AppCompatActivity() {
             binding.circularProgressBar.progressMax = 100f
             binding.circularProgressBar.setProgressWithAnimation(batteryLevel.toFloat())
             binding.txtCharge.text = batteryLevel.toString() + "%"
+
+            val health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
+            when (health) {
+                BatteryManager.BATTERY_HEALTH_DEAD -> {
+                    binding.txtHealth.text = "Your battery is fully dead , please change your battery"
+                    binding.txtHealth.setTextColor(Color.parseColor("#000000"))
+                    binding.imgHealth.setImageResource(R.drawable.health_dead)
+                }
+
+                BatteryManager.BATTERY_HEALTH_GOOD -> {
+                    binding.txtHealth.text = "Your battery is good , please take care of your battery"
+                    binding.txtHealth.setTextColor(Color.GREEN)
+                    binding.imgHealth.setImageResource(R.drawable.health_good)
+
+                }
+
+                BatteryManager.BATTERY_HEALTH_COLD -> {
+                    binding.txtHealth.text = "Your battery is cold , it's ok"
+                    binding.txtHealth.setTextColor(Color.BLUE)
+                    binding.imgHealth.setImageResource(R.drawable.health_cold)
+
+                }
+
+                BatteryManager.BATTERY_HEALTH_OVERHEAT -> {
+                    binding.txtHealth.text = "Your battery is overheat , please don't work with your phone"
+                    binding.txtHealth.setTextColor(Color.RED)
+                    binding.imgHealth.setImageResource(R.drawable.health_overheat)
+
+                }
+
+                BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> {
+                    binding.txtHealth.text = "Your battery is overVoltage , please don't work with your phone"
+                    binding.txtHealth.setTextColor(Color.YELLOW)
+                    binding.imgHealth.setImageResource(R.drawable.health_voltage)
+
+                }
+
+                else -> {
+                    binding.txtHealth.text = "Your battery is fully dead , please change your battery"
+                    binding.txtHealth.setTextColor(Color.parseColor("#000000"))
+                    binding.imgHealth.setImageResource(R.drawable.health_dead)
+                }
+            }
+
 
         }
 
