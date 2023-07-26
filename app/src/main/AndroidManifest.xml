@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
 
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
@@ -34,6 +36,10 @@
         <activity
             android:name=".activity.MainActivity"
             android:exported="true" />
+
+        <service android:name=".service.BatteryAlarmService"
+            android:enabled="true"
+            android:exported="true"/>
     </application>
 
 </manifest>

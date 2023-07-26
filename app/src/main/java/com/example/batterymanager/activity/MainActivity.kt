@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import androidx.core.content.ContextCompat
 import com.example.batterymanager.R
 import com.example.batterymanager.utils.BatteryUsage
 import com.example.batterymanager.databinding.ActivityMainBinding
 import com.example.batterymanager.model.BatteryModel
+import com.example.batterymanager.service.BatteryAlarmService
 import kotlin.math.roundToInt
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        startService()
+
         binding.imgMenu.setOnClickListener {
             binding.drawer.openDrawer(Gravity.RIGHT)
         }
@@ -37,6 +41,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         registerReceiver(batteryInfoReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+    }
+
+    private fun startService(){
+        val serviceIntent = Intent(this , BatteryAlarmService::class.java)
+        ContextCompat.startForegroundService(this , serviceIntent)
     }
 
 
