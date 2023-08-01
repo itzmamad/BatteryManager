@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.example.batterymanager.R
 import com.example.batterymanager.utils.BatteryUsage
 import com.example.batterymanager.databinding.ActivityMainBinding
+import com.example.batterymanager.helper.SpManager
 import com.example.batterymanager.model.BatteryModel
 import com.example.batterymanager.service.BatteryAlarmService
 import kotlin.math.roundToInt

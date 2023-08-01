@@ -3,7 +3,9 @@ package com.example.batterymanager.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.batterymanager.databinding.ActivitySplashBinding
+import com.example.batterymanager.helper.SpManager
 import java.util.Timer
 import kotlin.concurrent.timerTask
 
@@ -17,6 +19,12 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+
+        //SpManager.setServiceState(this@SplashActivity , true)
+
+
+        Log.e("3636" , "isServiceOn is : ${SpManager.isServiceOn(this@SplashActivity)}")
 
 //        helpTxt = findViewById<TextView>(R.id.help_txt)
 
