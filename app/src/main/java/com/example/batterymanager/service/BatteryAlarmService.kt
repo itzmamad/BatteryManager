@@ -59,19 +59,19 @@ class BatteryAlarmService : Service() {
 
             var plugState = ""
             if (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) == 0) {
-               // binding.txtPlug.text = "plug-out"
+                // binding.txtPlug.text = "plug-out"
                 plugState = "your phone using battery"
             } else {
-               // binding.txtPlug.text = " plug-in "
+                // binding.txtPlug.text = " plug-in "
                 plugState = "your phone is charging "
             }
 
-            if (batteryLevel > 98){
+            if (batteryLevel > 98) {
                 startAlarm()
                 plugState = "your phone is fully charged! "
             }
 
-            updateNotification(batteryLevel ,plugState )
+            updateNotification(batteryLevel, plugState)
         }
     }
 
@@ -86,6 +86,7 @@ class BatteryAlarmService : Service() {
         startForeground(NOTIFICATION_ID, notification)
     }
 
+
     private fun startAlarm() {
         val alarm: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val ring = RingtoneManager.getRingtone(applicationContext, alarm)
@@ -94,8 +95,7 @@ class BatteryAlarmService : Service() {
         val v = getSystemService(VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             v.vibrate(VibrationEffect.createOneShot(1500, VibrationEffect.DEFAULT_AMPLITUDE))
-
-        }else{
+        } else {
             v.vibrate(1500)
         }
     }
