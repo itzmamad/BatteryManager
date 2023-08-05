@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.batterymanager.R
 import com.example.batterymanager.utils.BatteryUsage
@@ -30,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        startService()
 
         binding.imgMenu.setOnClickListener {
             binding.drawer.openDrawer(Gravity.RIGHT)
@@ -42,13 +42,46 @@ class MainActivity : AppCompatActivity() {
         }
 
         registerReceiver(batteryInfoReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+
+
+
+        if (SpManager.isServiceOn(this@MainActivity) == true){
+            binding.incDrawer.serviceSwitchTxt.text = "service is on"
+            binding.incDrawer.serviceSwitch.isChecked = true
+            startService()
+        }else{
+            binding.incDrawer.serviceSwitchTxt.text = "service is off"
+            binding.incDrawer.serviceSwitch.isChecked = false
+            stopService()
+        }
+
+        binding.incDrawer.serviceSwitch.setOnCheckedChangeListener{switch , isCheck->
+
+            SpManager.setServiceState(this@MainActivity , isCheck)
+            if (isCheck){
+                startService()
+                binding.incDrawer.serviceSwitchTxt.text = "service is on"
+                Toast.makeText(applicationContext , "service is turn on" , Toast.LENGTH_SHORT).show()
+            }else{
+                stopService()
+                Toast.makeText(applicationContext , "service is turn off" , Toast.LENGTH_SHORT).show()
+                binding.incDrawer.serviceSwitchTxt.text = "service is off"
+            }
+        }
+
     }
+
+
 
     private fun startService(){
         val serviceIntent = Intent(this , BatteryAlarmService::class.java)
         ContextCompat.startForegroundService(this , serviceIntent)
     }
 
+    private fun stopService(){
+        val serviceIntent = Intent(this , BatteryAlarmService::class.java)
+        stopService(serviceIntent)
+    }
 
     private var batteryInfoReceiver: BroadcastReceiver = object : BroadcastReceiver() {
         @SuppressLint("SetTextI18n")
@@ -117,6 +150,7 @@ class MainActivity : AppCompatActivity() {
 
 
         }
+
 
 
     }

@@ -24,8 +24,8 @@ class SplashActivity : AppCompatActivity() {
         //SpManager.setServiceState(this@SplashActivity , true)
 
 
-        Log.e("3636" , "isServiceOn is : ${SpManager.isServiceOn(this@SplashActivity)}")
-
+//        Log.e("3636" , "isServiceOn is : ${SpManager.isServiceOn(this@SplashActivity)}")
+//
 //        helpTxt = findViewById<TextView>(R.id.help_txt)
 
 
