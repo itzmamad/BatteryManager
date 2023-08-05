@@ -3,6 +3,7 @@ package com.example.batterymanager.activity
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
@@ -12,6 +13,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import com.example.batterymanager.R
 import com.example.batterymanager.utils.BatteryUsage
@@ -32,6 +34,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
 
+        initDrawer()
+        serviceConfig()
+
+        registerReceiver(batteryInfoReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+
+
+    }
+
+
+    private fun initDrawer() {
+
         binding.imgMenu.setOnClickListener {
             binding.drawer.openDrawer(Gravity.RIGHT)
         }
@@ -41,45 +54,44 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        registerReceiver(batteryInfoReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
 
+    }
 
-
-        if (SpManager.isServiceOn(this@MainActivity) == true){
+    private fun serviceConfig() {
+        if (SpManager.isServiceOn(this@MainActivity) == true) {
             binding.incDrawer.serviceSwitchTxt.text = "service is on"
             binding.incDrawer.serviceSwitch.isChecked = true
             startService()
-        }else{
+        } else {
             binding.incDrawer.serviceSwitchTxt.text = "service is off"
             binding.incDrawer.serviceSwitch.isChecked = false
             stopService()
         }
 
-        binding.incDrawer.serviceSwitch.setOnCheckedChangeListener{switch , isCheck->
+        binding.incDrawer.serviceSwitch.setOnCheckedChangeListener { switch, isCheck ->
 
-            SpManager.setServiceState(this@MainActivity , isCheck)
-            if (isCheck){
+            SpManager.setServiceState(this@MainActivity, isCheck)
+            if (isCheck) {
                 startService()
                 binding.incDrawer.serviceSwitchTxt.text = "service is on"
-                Toast.makeText(applicationContext , "service is turn on" , Toast.LENGTH_SHORT).show()
-            }else{
+                Toast.makeText(applicationContext, "service is turn on", Toast.LENGTH_SHORT).show()
+            } else {
                 stopService()
-                Toast.makeText(applicationContext , "service is turn off" , Toast.LENGTH_SHORT).show()
                 binding.incDrawer.serviceSwitchTxt.text = "service is off"
+                Toast.makeText(applicationContext, "service is turn off", Toast.LENGTH_SHORT).show()
+
             }
         }
 
     }
 
-
-
-    private fun startService(){
-        val serviceIntent = Intent(this , BatteryAlarmService::class.java)
-        ContextCompat.startForegroundService(this , serviceIntent)
+    private fun startService() {
+        val serviceIntent = Intent(this, BatteryAlarmService::class.java)
+        ContextCompat.startForegroundService(this, serviceIntent)
     }
 
-    private fun stopService(){
-        val serviceIntent = Intent(this , BatteryAlarmService::class.java)
+    private fun stopService() {
+        val serviceIntent = Intent(this, BatteryAlarmService::class.java)
         stopService(serviceIntent)
     }
 
@@ -108,13 +120,15 @@ class MainActivity : AppCompatActivity() {
             val health = intent.getIntExtra(BatteryManager.EXTRA_HEALTH, 0)
             when (health) {
                 BatteryManager.BATTERY_HEALTH_DEAD -> {
-                    binding.txtHealth.text = "Your battery is fully dead , please change your battery"
+                    binding.txtHealth.text =
+                        "Your battery is fully dead , please change your battery"
                     binding.txtHealth.setTextColor(Color.parseColor("#000000"))
                     binding.imgHealth.setImageResource(R.drawable.health_dead)
                 }
 
                 BatteryManager.BATTERY_HEALTH_GOOD -> {
-                    binding.txtHealth.text = "Your battery is good , please take care of your battery"
+                    binding.txtHealth.text =
+                        "Your battery is good , please take care of your battery"
                     binding.txtHealth.setTextColor(Color.GREEN)
                     binding.imgHealth.setImageResource(R.drawable.health_good)
 
@@ -128,21 +142,24 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 BatteryManager.BATTERY_HEALTH_OVERHEAT -> {
-                    binding.txtHealth.text = "Your battery is overheat , please don't work with your phone"
+                    binding.txtHealth.text =
+                        "Your battery is overheat , please don't work with your phone"
                     binding.txtHealth.setTextColor(Color.RED)
                     binding.imgHealth.setImageResource(R.drawable.health_overheat)
 
                 }
 
                 BatteryManager.BATTERY_HEALTH_OVER_VOLTAGE -> {
-                    binding.txtHealth.text = "Your battery is overVoltage , please don't work with your phone"
+                    binding.txtHealth.text =
+                        "Your battery is overVoltage , please don't work with your phone"
                     binding.txtHealth.setTextColor(Color.YELLOW)
                     binding.imgHealth.setImageResource(R.drawable.health_voltage)
 
                 }
 
                 else -> {
-                    binding.txtHealth.text = "Your battery is fully dead , please change your battery"
+                    binding.txtHealth.text =
+                        "Your battery is fully dead , please change your battery"
                     binding.txtHealth.setTextColor(Color.parseColor("#000000"))
                     binding.imgHealth.setImageResource(R.drawable.health_dead)
                 }
@@ -152,6 +169,26 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onBackPressed() {
+        Toast.makeText(applicationContext, "back", Toast.LENGTH_SHORT).show()
+
+        val dialogBuilder = AlertDialog.Builder(this)
+            .setMessage("Do you want to close the application?")
+            .setCancelable(true)
+            .setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                finish()
+            })
+            .setNegativeButton("cancel" , DialogInterface.OnClickListener{
+                dialog , id -> dialog.cancel()
+            })
+
+        val alert = dialogBuilder.create()
+            alert.setTitle("Exit App")
+            alert.show()
 
     }
+
+
 }
