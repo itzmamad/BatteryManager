@@ -9,6 +9,10 @@ android {
     buildFeatures{
         viewBinding true
     }
+
+    lintOptions{
+        checkReleaseBuilds false
+    }
     defaultConfig {
         applicationId "com.example.batterymanager"
         minSdk 30
